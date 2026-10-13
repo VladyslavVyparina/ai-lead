@@ -1,0 +1,52 @@
+# GTM LOCK: European Portuguese default, named human sender, one coordinated
+# timeline, permission-based CTA. Safety/approval guards are fixed in code.
+locale: pt-PT
+sender:
+  name: "" # named Portuguese-speaking representative (fill before outreach)
+  brand: "AI Lead Pipeline"
+  founder: Anton Shumeiko
+
+channel_allocation:
+  email: 15
+  form: 6
+  social: 4 # Instagram / LinkedIn personalised
+  referral: 3
+  linkedin_larger: 2
+
+cadence:
+  - day: 1
+    channel: email # or form where that is the suitable business route
+    goal: one verified observation, one benefit, one CTA
+  - day: 3
+    channel: social
+    goal: personalised social follow-up
+  - day: 7
+    channel: email
+    goal: useful insight or preview link
+  - day: 12
+    channel: email
+    goal: close
+
+templates:
+  email_touch_1: |
+    Olá {contact_name},
+
+    Reparei que {verified_observation} — {business_name} podia captar mais marcações
+    com {benefit}.
+
+    Preparei uma auditoria breve (e uma pré-visualização, quando aplicável).
+    Posso enviar? Basta responder a este email.
+
+    {sender_name}, AI Lead Pipeline
+  email_touch_close: |
+    Olá {contact_name},
+
+    Último contacto da minha parte — se fizer sentido melhorar {gap_summary},
+    respondo com todo o gosto. Caso contrário, não volto a incomodar.
+
+    {sender_name}, AI Lead Pipeline
+
+rules:
+  whatsapp: invited_or_opt_in_only
+  max_touches: 4
+  stop_on: [reply, opt_out, bounce, manual_pause]

@@ -1,0 +1,146 @@
+{% extends "base.html" %}
+{% block title %}Джерела — AI Lead Pipeline{% endblock %}
+{% block content %}
+<div class="page-head">
+  <p class="eyebrow">Sources</p>
+  <h1>Джерела даних</h1>
+  <p class="lede">Запустіть конектор — система сама збагатить, оцінить FitQL і поставить топ-ліди на approval preview.</p>
+</div>
+
+<div class="card" style="margin-bottom:18px;">
+  <h2>Porto wellness vertical slice</h2>
+  <p class="muted">Discovery → enrichment → FitQL → top 5 shortlist. Далі вручну лише approval preview і approval outreach.</p>
+  <div class="actions">
+    <form class="inline" method="post" action="/ui/sources/porto-wellness/ensure"><button class="small secondary">Ensure connector</button></form>
+    <form class="inline" method="post" action="/ui/sources/porto-wellness/run"><button>Run connector (20 leads)</button></form>
+  </div>
+</div>
+
+{% set ns = namespace(has_csv=false) %}
+{% for c in connectors %}
+  {% if c.adapter in ['csv_import', 'manual'] %}{% set ns.has_csv = true %}{% endif %}
+{% endfor %}
+
+<div class="row">
+  <div class="card">
+    <h2>Додати бізнес вручну</h2>
+    <p class="muted">Вставте посилання на профіль бізнесу (каталог, Instagram, сайт) і заповніть відомі поля. Все інше — потім у картці ліда.</p>
+    {% if ns.has_csv %}
+    <form method="post" action="/ui/sources/quick-add">
+      <label>Конектор (джерело)</label>
+      <select name="connector_id" required>
+        {% for c in connectors %}
+          {% if c.adapter in ['csv_import', 'manual'] %}
+          <option value="{{ c.id }}">{{ c.name }}</option>
+          {% endif %}
+        {% endfor %}
+      </select>
+      <label>Назва бізнесу *</label>
+      <input name="business_name" required>
+      <div class="row">
+        <div>
+          <label>Категорія</label>
+          <select name="category">{% for cat in categories %}<option value="{{ cat }}">{{ cat }}</option>{% endfor %}</select>
+        </div>
+        <div>
+          <label>Місто</label>
+          <select name="city">{% for city in cities %}<option value="{{ city }}">{{ city }}</option>{% endfor %}</select>
+        </div>
+      </div>
+      <label>Лінк на джерело/профіль</label>
+      <input name="profile_url" placeholder="https://...">
+      <label>Сайт бізнесу (якщо є)</label>
+      <input name="website_url" placeholder="https://...">
+      <div class="row">
+        <div><label>Email</label><input name="email"></div>
+        <div><label>Телефон</label><input name="phone" placeholder="+351..."></div>
+      </div>
+      <label>Instagram</label>
+      <input name="instagram" placeholder="@handle або лінк">
+      <div style="margin-top:16px;"><button>Додати бізнес</button></div>
+    </form>
+    {% else %}
+    <div class="empty-hint">Спочатку створіть конектор типу <strong>CSV / ручний імпорт</strong> у правій колонці — без нього додати бізнес не можна.</div>
+    {% endif %}
+  </div>
+
+  <div>
+    <div class="card">
+      <h2>Новий конектор</h2>
+      <p class="muted">Конектор описує, звідки дані і що з ними дозволено робити.</p>
+      <form method="post" action="/ui/sources/connectors">
+        <label>Назва (напр. porto-wellness-directory)</label>
+        <input name="name" required>
+        <label>Тип</label>
+        <select name="adapter">
+          <option value="directory_seed">Directory seed (automation)</option>
+          <option value="csv_import">CSV / ручний імпорт</option>
+          <option value="inbound_webhook">Вхідний вебхук (форми/реклама)</option>
+        </select>
+        <label>Категорія</label>
+        <input name="category" value="massage_wellness">
+        <label>Catalog ref</label>
+        <input name="catalog_ref" value="porto_wellness_v1">
+        <label>Дозволене використання (permitted use)</label>
+        <input name="permitted_use" value="pilot research, public business data" required>
+        <div style="margin-top:16px;"><button>Створити</button></div>
+      </form>
+    </div>
+
+    <div class="card">
+      <h2>Конектори</h2>
+      {% if connectors %}
+      <div class="table-scroll">
+      <table class="connectors-table">
+        <tr><th>ID</th><th>Назва</th><th>Мета</th><th>Дія</th></tr>
+        {% for c in connectors %}
+        <tr>
+          <td>{{ c.id }}</td>
+          <td>{{ c.name }}
+            <div class="muted">{{ c.permitted_use }}</div>
+            <div class="muted">records {{ c.record_count or 0 }} · errors {{ c.error_count or 0 }}{% if c.last_run_at %} · last {{ c.last_run_at.strftime('%d.%m %H:%M') }}{% endif %}</div>
+          </td>
+          <td>
+            <span class="badge gray">{{ c.adapter }}</span>
+            {% if c.category %}<div class="muted">{{ c.category }}</div>{% endif %}
+            {% if c.cities %}<div class="muted">{{ c.cities|join(', ') }}</div>{% endif %}
+          </td>
+          <td class="csv-cell">
+            {% if c.adapter == 'directory_seed' %}
+            <form method="post" action="/ui/sources/{{ c.id }}/run">
+              <button class="small" type="submit">Run</button>
+            </form>
+            {% elif c.adapter == 'csv_import' %}
+            <form class="csv-import-form" method="post" action="/ui/sources/{{ c.id }}/import-csv" enctype="multipart/form-data">
+              <input type="file" name="file" accept=".csv" required>
+              <button class="small secondary" type="submit">Імпорт</button>
+            </form>
+            {% else %}<span class="muted">—</span>{% endif %}
+          </td>
+        </tr>
+        {% endfor %}
+      </table>
+      </div>
+      {% else %}<p class="muted">Ще немає конекторів — створіть перший вище.</p>{% endif %}
+      <p class="muted" style="margin-top:12px;">Формат CSV: колонки <code>name,category,city,address,website,email,phone</code>.</p>
+    </div>
+
+    {% if jobs %}
+    <div class="card">
+      <h2>Останні pipeline jobs</h2>
+      <table>
+        <tr><th>ID</th><th>Type</th><th>Status</th><th>Stage</th></tr>
+        {% for j in jobs %}
+        <tr>
+          <td>{{ j.id }}</td>
+          <td>{{ j.job_type }}</td>
+          <td><span class="badge {% if j.status == 'succeeded' %}green{% elif j.status == 'failed' %}red{% else %}gray{% endif %}">{{ j.status }}</span></td>
+          <td class="muted">{{ j.stage }}{% if j.cost_units %} · cost {{ '%.2f'|format(j.cost_units) }}{% endif %}</td>
+        </tr>
+        {% endfor %}
+      </table>
+    </div>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

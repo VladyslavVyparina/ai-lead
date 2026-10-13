@@ -1,0 +1,23 @@
+# Pilot markets (PILOT LOCK): three configurable Portuguese cities.
+markets:
+  porto:
+    country: PT
+    locale: pt-PT
+    active: true
+  lisbon:
+    country: PT
+    locale: pt-PT
+    active: true
+  braga:
+    country: PT
+    locale: pt-PT
+    active: true
+
+segments:
+  primary:
+    - beauty_aesthetics
+    - massage_wellness
+  secondary_validation:
+    - aesthetic_clinic
+  separate_test:
+    - coach_trainer

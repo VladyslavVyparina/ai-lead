@@ -1,0 +1,12 @@
+__pycache__/
+*.pyc
+.env
+*.db
+.DS_Store
+.pytest_cache/
+.venv/
+.tools/
+site_template/node_modules/
+site_template/.next/
+site_template/.local-site-config.json
+app.log

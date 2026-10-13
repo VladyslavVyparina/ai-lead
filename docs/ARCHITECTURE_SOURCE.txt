@@ -1,0 +1,466 @@
+AI LEAD-TO-WEBSITE PIPELINE  |  Final MVP architecture
+Owner: Lead AI Engineer  ·  Builder: AI Product Trainee  ·  4 weeks
+Architecture board
+
+Pilot funnel board
+
+PILOT GATE
+Beauty/wellness in Porto, Lisbon and Braga; 15 Tier A working preview-site/proposal packages; 15 Tier B audit-led packages; 30 controlled contacts; target five qualified conversations; separate 1,000-record technical load test.
+
+GTM LOCK
+The first-GTM research is incorporated below. These are P0 operating defaults; weekly evidence may update them through versioned configuration.
+
+
+1. Scope, decisions and boundaries
+1.1 Mission and MVP outcome
+Build a scalable, configurable workflow that converts discovered or inbound businesses into verified leads, working personalised preview websites, approved proposals, controlled outreach and measurable sales outcomes. The result must be maintainable and improvable by the owner without routine developer involvement.
+Area
+Final decision
+Architecture
+Deterministic orchestrator with replaceable adapters and bounded agents; no monolithic autonomous agent
+Extensibility
+Markets, source instances, scoring, templates, offers, prices and messages are versioned configuration
+Sources
+Approved source adapters declare permission, provenance, quotas and retention; credentials remain in managed secrets
+Inbound
+Generic webhook/manual-import contract is P0; production Meta Lead Ads integration is P1 when ads are actually launched
+Working websites
+Verified lead data fills a prebuilt business-category Next.js template, passes QA and deploys automatically to a working preview URL
+Deployment
+A deterministic renderer and hosting adapter run per site; Claude Code/Codex is used to create and improve templates, not to manually edit and push every lead site
+Outreach
+Human-approved sending in P0; named Portuguese-speaking sender; email/form primary; WhatsApp only when invited or opted in
+Brand
+Skylix is the commercial studio; a real human sender leads outreach; Anton Shumeiko is founder and technical authority
+
+1.2 Non-goals
+• No production Meta ads, scaled PPC, mass autonomous outreach, cold WhatsApp/SMS or production AI calling in P0.
+• No multi-country localisation, predictive ML, full booking/payment backend or 50+ generated websites in P0.
+• No copying third-party photos/reviews, invented facts, fake scarcity, medical claims or guaranteed revenue uplift.
+1.3 Roles
+Role
+Responsibility
+Owner
+Source and product strategy, approvals, pricing, brand, system configuration and final scale decisions
+Developer/trainee
+Build reusable platform, adapters, control plane, tests and documented handoff
+GTM/marketing owner
+Maintain Portuguese copy, channel and experiment configuration; validate proof; review objections, performance and stop/scale decisions weekly
+Future sales
+Portuguese human sales manager for replies, calls and closing if qualified conversations justify the role
+
+PILOT LOCK
+Target beauty/aesthetics and massage/wellness businesses in Porto, Lisbon and Braga. Lead with website + online booking + follow-up; target five qualified conversations from 30 contacts.
+
+
+2. Configurable platform and source architecture
+2.1 Owner self-service
+Capability
+Owner workflow
+No-code boundary
+Markets
+Create/clone/pause city and area configs
+No core change
+Source Catalogue
+Choose approved adapter, credentials reference, permissions, field mapping, cities, quotas and schedule; dry-run before publish
+New instance is configuration; new protocol may require adapter code
+Qualification
+Edit hard filters, weights and thresholds; replay on sample
+Publish/rollback rubric versions
+Website templates
+Register audited Next.js/Lovable export, map SiteConfig/theme, preview and publish
+Core uses TemplateManifest only
+Commercial
+Edit BrandProfile, packages, add-ons, support, proposal sections and effective dates
+No prices in code/prompts
+Messaging
+Edit channel copy, locale, CTA and cadence
+Safety/approval/permission guards remain fixed
+Cost/quality
+Set provider priority, task budgets, quality thresholds and approved experiments
+Router changes configuration; production promotion remains gated
+
+2.2 Source adapter contract
+Source class
+P0 treatment
+Output
+Approved business-discovery adapter
+Directory/API/CSV/manual research contract; no Google Maps scraping or stored Maps content
+SourceRecord + provenance and permission metadata
+Approved external business-data adapter
+Generic API/scraper/actor/CSV contract with explicit source permissions
+SourceRecord + source permissions metadata
+Manual/CSV import
+Real P0 connector
+Validated import + declared origin
+Generic inbound webhook
+P0 contract and test endpoint
+MQL route + consent/source metadata
+Meta Lead Ads
+P1 production adapter, not required for P0
+Official webhook/API payload mapped to inbound contract
+
+META CLARIFICATION
+P0 proves that inbound leads can enter dynamically, but does not require Meta credentials, Page permissions or ad spend. Build the generic inbound contract now; add the actual Meta adapter only when a campaign exists.
+
+2.3 Configuration lifecycle
+Draft → schema/permission validation → sample preview → dry run → publish immutable version → monitor → rollback future runs. Historical CampaignRuns always retain the versions they used.
+SOURCE RULE
+Every source instance declares owner, permitted use, field mapping, quotas, retention and credentials reference. Store secrets in managed infrastructure and keep test fixtures synthetic or redacted.
+
+
+3. Workflow, state and data model
+3.1 Source-aware routing
+Route
+Mandatory path
+Qualification label
+Discovered
+Normalize → dedupe → verify active business → enrich/audit → score → human shortlist
+FitQL
+Inbound form/webhook
+Normalize → dedupe → validate campaign/contact/consent → human review
+MQL; not automatically SQL
+Referral/import
+Validate declared origin and permission → dedupe → route by configured source type
+MQL or FitQL
+
+3.2 State machine
+State
+Meaning
+Next
+new / validated
+Source received, identity resolved
+MQL, FitQL, rejected
+MQL / FitQL
+Inbound intent or outbound fit passed
+shortlisted, nurture, rejected
+shortlisted
+Human selected for asset creation
+preview_ready, rejected
+preview_ready
+Working preview website/proposal generated and versioned
+approved, revision
+approved / contacted
+Current assets/channel approved; contact logged
+engaged, follow_up, suppressed
+engaged / SQL
+Reply/action and human-confirmed opportunity
+meeting, won, lost, nurture
+suppressed
+No further marketing contact
+Manual/legal reactivation only
+
+3.3 Canonical entities
+Configuration
+Lead intelligence
+Assets/commercial
+Engagement
+Campaign, Market, SourceConnector, CampaignRun, SourceRun, BrandProfile
+Business, ContactPoint, SourceRecord, Evidence, Qualification, WebsiteAudit
+Template, WebsiteBuild, Offer, Pricebook, ProposalTemplate, Proposal
+Consent, Suppression, Message, Event, Reply, Opportunity
+
+3.4 Reliability rules
+• Every transition writes an immutable event with actor, reason, version, correlation ID and idempotency key.
+• One provider/city SourceRun can fail and resume from checkpoint without blocking other runs or creating duplicates.
+• Suppression overrides retries, follow-ups and campaign schedules. Revoked approval invalidates queued messages.
+• Every generated fact and price links to evidence/Pricebook version; low-confidence output routes to review.
+
+4. Discovery, verification and qualification
+4.1 Pilot volume
+FUNNEL
+≥500 raw records → ≥300 unique businesses → ≥150 verified → ≥60 qualified → 30 human-approved → 15 Tier A + 15 Tier B packages → 30 controlled outbound contacts. Separately load-test 1,000 mixed records.
+
+4.2 Captured and derived data
+Type
+Examples
+Rule
+Identity
+Business name/category, address, hours, source/business-profile URL and public business contacts
+Always retain provenance and capture time
+Brand/content
+Logo, colours/style, description, services, verified prices, team and social profiles
+Missing or uncertain fields are omitted/reviewed, never invented
+Demand proxies
+Rating/review count, service breadth, practitioners/locations
+Never call these revenue facts
+Digital gap
+No site, weak mobile, missing booking CTA, unclear services/contact
+Evidence-backed audit only
+Permission
+Source allowed use, business/personal contact type, channel consent/suppression
+Checked before every contact
+
+4.3 Outbound FitQL
+Dimension
+Weight
+Evidence
+ICP fit
+25
+Niche, geography, operating profile
+Digital gap
+30
+Website/booking/conversion audit
+Value capacity
+20
+Demand and business-complexity proxies
+Contactability
+15
+Verified permitted business contact path
+Evidence quality
+10
+Freshness, consistency and confidence
+
+Initial routing: 75-100 priority review; 55-74 manual/nurture; below 55 reject. These are editable pilot defaults, not validated market truth.
+FITQL LOCK
+Use the published 30/25/20/15/10 scoring model. Tier A is the highest-fit 15; Tier B is the next 15. Recalibrate only from shortlist precision, qualified conversations and live objections.
+
+
+5. Working website and proposal factory
+5.1 Live reference examples
+Business category
+Reference
+Use
+Private coach
+https://tiago-rodrigues.lovable.app/
+Reference for coach structure/style; audit/export and normalise before Template Registry publication
+Massage/wellness
+https://kaapora.pt/pt
+Primary live wellness reference: services/prices, location, WhatsApp booking and bilingual structure
+
+5.2 Automated build and deployment
+Scrape/enrich → verify facts → create compact SiteConfig/JSON Patch → render a prebuilt Next.js category template → validate build, links, form and booking → deploy through Vercel/hosting CLI/API → return a working URL.
+Contract
+Required fields / behaviour
+SiteConfig
+Name/category, location/hours, verified contacts/socials, services/prices, description/team, logo/colours, SEO, form/booking settings; each fact has source/confidence
+Template + skill
+Versioned Next.js code and schema plus a reusable Website Builder Skill; per lead it emits only validated SiteConfig or a minimal JSON Patch
+CLI/MCP execution
+Use existing scraper, asset, Git, build, Playwright/Lighthouse and Vercel MCP/CLI/API adapters where available; return structured logs/results
+Working site
+Responsive pages, valid navigation, click-to-call/email/WhatsApp, real form, working booking request/link, SSL and deployed URL
+Hosting adapter
+Template version + config → build/deploy status, URL, logs, expiry and teardown; Vercel first, provider-replaceable
+
+TOKEN/COST POLICY
+Claude Code/Codex creates and improves reusable templates, but does not rewrite a repository per lead. Prefer cache and deterministic CLI/MCP operations; use the smallest sufficient model for structured extraction/copy and escalate only ambiguous or failed cases. Enforce per-lead budgets.
+
+5.3 Preview and production modes
+Preview for outreach
+Production after sale
+Temporary low-cost URL; noindex; labelled concept; all links work; form and booking request route to a controlled operator/test endpoint; verified existing booking links may be used; expiry/takedown
+Client-approved facts; custom domain; form and booking route to the client; analytics and purchased integrations activated
+
+5.4 Packages and proposal
+Tier A: evidence + audit + working personalised preview site + recommended/alternative offer + proposal + channel draft. Tier B: evidence + concise audit + recommended offer + personalised channel draft; build the site after interest.
+Use the owner-provided Kaapora business proposal as the first structural reference: ProposalTemplate + verified facts/audit + Preview URL + eligible Offer + Pricebook + BrandProfile → versioned HTML/PDF. Kaapora-specific copy and prices remain editable data, not renderer logic.
+ASSET LOCK
+Lead with the verified booking/mobile gap, not AI. Use a personalised audit, clearly labelled concept preview where justified, truthful proof, recommended €500-900 offer and one permission-based CTA.
+
+
+6. Commercial seed, support and brand
+6.1 Pricebook derived from the Kaapora proposal
+Package
+From
+Pilot scope
+Best fit
+Basic Website
+€300
+Working one-page site, domain setup, contact form/links, base local SEO, analytics and Search Console
+Credible online presence
+Local Pro
+€500-600
+Basic plus business-profile/map assistance and online booking integration
+Discovery + easy booking
+Automation Pro
+€700-900
+Local Pro plus simple CRM and optional assistant integration
+Lead/client management and automation
+
+6.2 Add-ons
+Add-on
+Range
+Scope
+Business-profile/map setup
++€80-120
+Creation/fix assistance, categories, business info and site connection
+Online booking
++€150-250
+Tool selection, embedded path, notifications and simple management
+Simple CRM
++€150-250
+Client/lead database, stages, form integration and guide
+AI/WhatsApp assistant
++€200-300
+FAQ/booking support and CRM handoff when approved
+
+6.3 Support
+Plan
+Price
+Included
+Essential Care
+€99/year prepaid
+Hosting/SSL, uptime checks, backups and basic technical maintenance; no routine content work
+Managed Care
+€19/month or €190/year
+Essential plus one small update/quarter and form/booking health check
+Growth Care
+€39/month or €390/year
+Managed plus one small update/month and basic analytics/SEO summary
+
+Every package includes 30 days launch support. Domains and paid booking/CRM/model/message subscriptions are separate. Recommended payment: 50% to start, 50% before production launch.
+6.4 Brand decision
+POSITIONING
+A real Portuguese-speaking representative leads first contact under Skylix and owns replies. Anton Shumeiko is the visible founder and technical authority. Use accurate legal seller details and truthful work attribution.
+
+Recommended: Skylix is the commercial delivery studio; a real Portuguese-speaking representative owns first contact and replies; Anton Shumeiko is the visible founder, Lead AI Engineer and technical authority. Use accurate roles, seller details and truthful proof without implying a larger team or client history.
+OFFER LOCK
+Lead with Local Pro/Automation Pro at €500-900: mobile site, booking and follow-up. Keep €300 Basic as a credible-entry option; add-ons, recurring care, payment terms and scope stay versioned in Pricebook.
+
+
+7. Marketing and sales strategy
+7.1 Pilot ICP
+Dimension
+Pilot default
+Markets
+Porto, Lisbon and Braga as three configurable Portuguese pilot cities
+Primary segments
+Independent multi-practitioner beauty/aesthetics and massage/wellness businesses
+Secondary validation
+Aesthetic clinics; coaches/trainers remain a separate template/offer test
+Buyer
+Owner, clinic/studio manager or marketing lead
+Problem + fit
+Weak mobile journey, service clarity, booking or follow-up; active-demand evidence and capacity for a €500-900 solution
+
+7.2 Channel plan
+Channel
+P0 allocation
+Rule
+Personalised email
+15 leads
+Primary outbound: one verified observation, one benefit and one CTA
+Website contact form
+6 leads
+Human, concise alternative where the form is the suitable business route
+Instagram / LinkedIn
+4 leads
+Personalised social test and owner discovery; no mass cold DMs
+Referral / partner
+3 leads
+Benchmark high-trust introductions from adjacent providers
+LinkedIn larger operators
+2 leads
+Test managers/owners at clinics, multi-location studios and stronger-fit accounts
+
+7.3 Outreach principles
+• Use a named human sender and European Portuguese by default. Lead with one verified business observation, one outcome and a permission-based CTA; keep AI implementation secondary.
+• One lead timeline: Day 1 email/form; Day 3-4 social follow-up; Day 7 useful insight/preview; Day 12 close. Reply, opt-out, bounce or pause stops the sequence.
+• WhatsApp is for invited, opted-in or prospect-initiated business conversations. No scraped-list broadcasting, fake scarcity, invented proof or promised uplift.
+• Positive or ambiguous replies pause automation and transfer to a human for qualification, meeting and proposal.
+7.4 Experiment plan
+Primary P0 objective: at least five qualified conversations from 30 approved contacts. Change one major variable at a time and decide weekly from qualified conversations, meetings, proposals, wins, opt-outs, CAC and cost per SQL, not opens or clicks.
+GTM LOCK
+Use European Portuguese by default, a named human sender and one coordinated timeline. WhatsApp follows invitation/opt-in; every reply, opt-out, bounce or manual pause cancels remaining touches.
+
+
+8. Analytics, governance and safeguards
+8.1 Required KPIs
+Metric
+Definition
+Use
+Source-to-valid
+Validated unique / raw records
+Source quality
+Shortlist precision
+Human-approved / system shortlist
+Qualification quality; target ≥80%
+Asset completion
+Approved packages / approved leads
+Generation reliability
+Median site time
+Minutes from build start to deployed, QA-ready preview
+Economics; target <60 min
+Cost per QA-ready site
+Model tokens + tools + hosting + operator time / passed site
+Routing and template economics
+Qualified conversation / meeting / win
+Stage outcome / eligible prior stage
+Message, sales and offer effectiveness
+Opt-out rate
+Opt-outs / delivered contacts
+Relevance and risk
+CAC / cost per SQL
+Acquisition + attributable operator cost / customers or SQLs
+Channel and scale decision
+
+8.2 Governance
+• Source credentials and provider keys use managed secrets; repository fixtures are synthetic or redacted.
+• Every source fact, score, website build, Pricebook item, proposal and message stores its version and provenance.
+• No external message without current approval, permitted channel and suppression check.
+• Public business contact does not automatically mean unrestricted scraping or marketing use; review source terms and applicable law before scale.
+• Preview sites are unlisted, noindex, labelled, expiring and removable immediately.
+• AI voice remains off until legal/disclosure approval, script review, narrow test limits and human escalation exist.
+8.3 GTM decision register
+Decision
+Final P0 baseline
+ICP/markets
+Porto, Lisbon, Braga; beauty/aesthetics + massage/wellness; owner or studio/clinic manager
+Source/scoring
+Approved sources; 30/25/20/15/10 rubric; top 15 Tier A and next 15 Tier B
+Offer/price
+Lead with €500-900 website + booking + follow-up; €300 entry offer; versioned add-ons/support
+Assets/proposal
+Portuguese-first, named sender, verified audit, truthful proof, concept preview where justified, one CTA
+Outreach
+15 email + 6 forms + 4 social + 3 referrals + 2 larger-operator LinkedIn; four-touch maximum
+Experiment
+Target ≥5 qualified conversations from 30; weekly go/change/stop review; PPC only after tracking and message validation
+
+8.4 Controlled cost/quality improvement loop
+Stage
+Behaviour
+Observe
+Record task-level quality, latency, failures, tokens, provider/tool fees and downstream outcome
+Compare
+Evaluate approved rules, CLIs, models and providers on a versioned test set and live canary cohort
+Propose
+Router recommends a cheaper or higher-quality configuration; it never edits production code or prompts silently
+Approve + roll out
+Human approves material changes; canary first, promote only above thresholds, otherwise rollback
+
+OPTIMISATION ORDER
+Cached result → deterministic code/CLI → smallest sufficient model → larger model → human escalation. Optimise cost only while factual, functional, legal and conversion-quality gates continue to pass.
+
+
+9. Four-week implementation and acceptance
+Week
+Build
+Acceptance
+1 - Foundation
+Repo/template audit; schema; state machine; Owner Control Plane; markets; Source Catalogue; approved directory/API, CSV/manual-import and generic inbound contracts; dedupe
+Configure Porto, Lisbon, Braga and approved sources; ingest ≥500 raw and resolve ≥300 unique with provenance
+2 - Intelligence
+Verification, website audit, FitQL/MQL routing, evidence view, scoring and human shortlist
+≥150 verified, ≥60 qualified, 30 approved; shortlist precision ≥80% or recalibrated
+3 - Websites/commercial
+Audit reference templates; publish wellness TemplateManifest + SiteConfig; build renderer, functional QA and Vercel/hosting adapter; preview expiry; BrandProfile; editable Pricebook; Kaapora-based ProposalTemplate
+15 Tier A working preview sites/proposals + 15 Tier B audit-led packages; median site <60 min
+4 - Engagement/handoff
+Approval queue; coordinated email/form/social workflow; opted-in WhatsApp handoff; reply/opportunity states; suppression; analytics; PPC-ready tracking; 1,000-record load test; owner docs
+30 controlled contacts + inbound tests; zero duplicate sends/invented facts; reproducible owner-operated run
+
+9.1 Definition of done
+• Owner can add/pause a city or source instance, change scoring, import/publish a template, update Pricebook/proposal/message configuration and rollback without core code changes.
+• The same pipeline processes discovered, CSV/manual and generic inbound leads without source-specific workflow forks.
+• Fifteen Tier A working websites and fifteen Tier B packages pass factual, functional, brand and commercial QA and cover all pilot cities/source routes.
+• Every Tier A URL loads successfully; navigation/contact links work; concept form/booking requests route safely; deployments can expire or be removed; client routing activates only after sale and approval.
+• A routine per-lead build changes SiteConfig/JSON Patch only; schema validation, build, functional tests and deployment run through reusable CLI/MCP adapters without a full-repository LLM rewrite.
+• Every task records model/tool/version, tokens, fees, latency and QA result; campaign and per-lead budgets stop or downgrade work before overspend.
+• No send bypasses approval, consent/channel or suppression; webhook and job retries are idempotent.
+• Tests cover dedupe, routing, scoring, source failure/resume, template validation, unsupported facts/prices, revoked approval, opt-out and 1,000-record load.
+• Handoff includes setup, data dictionary, config guide, adapter/template contracts, operating runbook, risks, demo video and owner walkthrough.
+FINAL GATE
+Ship only when the owner can operate and improve the platform, the 30-package cohort is factually correct, the first-GTM decisions are configured, and outreach is measurable without exposing credentials or personal data.
+

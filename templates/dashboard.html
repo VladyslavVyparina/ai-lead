@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+{% block title %}Дашборд — AI Lead Pipeline{% endblock %}
+{% block content %}
+<div class="page-head">
+  <p class="eyebrow">Pilot · Porto · Lisbon · Braga</p>
+  <h1>Дашборд</h1>
+  <p class="lede">Воронка від джерела до розмови — і заявки з превʼю-сайтів у одному місці.</p>
+</div>
+
+<div class="grid kpi">
+  <div class="kpi-box"><div class="num">{{ kpi.funnel.raw_records }}</div><div class="label">Сирих записів</div></div>
+  <div class="kpi-box"><div class="num">{{ kpi.funnel.unique_businesses }}</div><div class="label">Унікальних бізнесів</div></div>
+  <div class="kpi-box"><div class="num">{{ kpi.funnel.qualified }}</div><div class="label">Кваліфіковано</div></div>
+  <div class="kpi-box"><div class="num">{{ kpi.funnel.human_approved }}</div><div class="label">Схвалено людиною</div></div>
+  <div class="kpi-box"><div class="num">{{ kpi.sites.deployed }}</div><div class="label">Превʼю-сайтів</div></div>
+  <div class="kpi-box"><div class="num">{{ kpi.outreach.sent }}</div><div class="label">Відправлено контактів</div></div>
+  <div class="kpi-box"><div class="num">{{ kpi.sales.sql }}</div><div class="label">SQL / розмови</div></div>
+  <div class="kpi-box"><div class="num">{{ kpi.outreach.opt_outs }}</div><div class="label">Відписок</div></div>
+</div>
+
+<div class="row" style="margin-top:8px;">
+  <div class="card">
+    <h2>Заявки з превʼю</h2>
+    {% if submissions %}
+    <div class="table-scroll">
+    <table>
+      <tr><th>Лід</th><th>Імʼя</th><th>Контакт</th><th>Повідомлення</th><th>Час</th></tr>
+      {% for s in submissions %}
+      {% set business = businesses.get(s.business_id) %}
+      <tr>
+        <td>{% if business %}<a href="/ui/leads/{{ business.id }}">{{ business.name }}</a>{% else %}#{{ s.business_id }}{% endif %}</td>
+        <td>{{ s.name }}</td>
+        <td>{{ s.contact }}</td>
+        <td>{{ s.message or '—' }}</td>
+        <td class="muted">{{ s.created_at.strftime('%d.%m.%Y %H:%M') if s.created_at else '—' }}</td>
+      </tr>
+      {% endfor %}
+    </table>
+    </div>
+    {% else %}
+    <p class="muted" style="margin:0;">Заявок із превʼю-сайтів ще немає. Після відправки форми з превʼю вони зʼявляться тут.</p>
+    {% endif %}
+  </div>
+
+  <div class="card quiet">
+    <h2>Якість</h2>
+    <table>
+      <tr><td>Source-to-valid</td><td><strong>{% if kpi.source_to_valid is not none %}{{ '%.0f'|format(kpi.source_to_valid * 100) }}%{% else %}—{% endif %}</strong></td></tr>
+      <tr><td>Shortlist precision (≥80%)</td><td><strong>{% if kpi.shortlist_precision is not none %}{{ '%.0f'|format(kpi.shortlist_precision * 100) }}%{% else %}—{% endif %}</strong></td></tr>
+      <tr><td>Asset completion</td><td><strong>{% if kpi.asset_completion is not none %}{{ '%.0f'|format(kpi.asset_completion * 100) }}%{% else %}—{% endif %}</strong></td></tr>
+      <tr><td>Opt-out rate</td><td><strong>{% if kpi.outreach.opt_out_rate is not none %}{{ '%.0f'|format(kpi.outreach.opt_out_rate * 100) }}%{% else %}—{% endif %}</strong></td></tr>
+    </table>
+  </div>
+</div>
+
+<div class="card">
+  <h2>Робочий ритм</h2>
+  <p class="muted" style="line-height:1.75;margin:0;">
+    1. <a href="/ui/sources">Джерела</a> — конектор + CSV або ручне додавання з лінком.<br>
+    2. <a href="/ui/leads">Ліди</a> — верифікація, аудит, факти, оцінка FitQL.<br>
+    3. Shortlist → превʼю-сайт і пропозиція.<br>
+    4. <a href="/ui/outreach">Аутріч</a> — чернетка → затвердження → позначка після реальної відправки.
+  </p>
+</div>
+{% endblock %}

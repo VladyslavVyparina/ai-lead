@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %}Вхід — AI Lead Pipeline{% endblock %}
+{% block content %}
+<div class="login-stage">
+  <div class="orbit" aria-hidden="true"></div>
+  <div class="orbit b" aria-hidden="true"></div>
+  <div class="login-panel">
+    <p class="eyebrow" style="margin:0 0 10px;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--forest);font-weight:600;">Control plane</p>
+    <h1 class="mark">AI Lead <span>Pipeline</span></h1>
+    <p class="muted" style="margin:0 0 22px;line-height:1.55;">Операторський доступ до lead-пайплайну. Введіть ADMIN_TOKEN із серверного `.env`.</p>
+    <form method="post" action="/ui/login">
+      <label>Токен доступу</label>
+      <input type="password" name="token" autofocus required placeholder="••••••••••••" autocomplete="current-password">
+      <div style="margin-top:18px;"><button style="width:100%;">Увійти</button></div>
+    </form>
+  </div>
+</div>
+{% endblock %}

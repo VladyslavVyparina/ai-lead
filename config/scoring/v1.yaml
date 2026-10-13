@@ -1,0 +1,27 @@
+# FITQL LOCK: published 30/25/20/15/10 model. Editable pilot defaults —
+# recalibrate only from shortlist precision, qualified conversations and live objections.
+weights:
+  digital_gap: 30
+  icp_fit: 25
+  value_capacity: 20
+  contactability: 15
+  evidence_quality: 10
+
+thresholds:
+  priority_review: 75
+  manual_nurture: 55
+  # below manual_nurture -> reject
+
+tiers:
+  a_size: 15
+  b_size: 15
+
+icp:
+  categories:
+    - beauty_aesthetics
+    - massage_wellness
+    - aesthetic_clinic
+  cities:
+    - porto
+    - lisbon
+    - braga

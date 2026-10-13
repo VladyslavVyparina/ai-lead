@@ -1,0 +1,39 @@
+# Template Registry (§2.1, §5.1). Core uses TemplateManifest only; templates are
+# audited Next.js/Lovable exports published separately.
+preview_expiry_days: 30
+
+themes:
+  default:
+    primary_color: "#2f6f5e"
+    accent_color: "#b08948"
+    font_display: "Fraunces"
+    font_body: "Outfit"
+  massage_wellness:
+    primary_color: "#2f6f5e"
+    accent_color: "#b08948"
+    font_display: "Fraunces"
+    font_body: "Outfit"
+  beauty_aesthetics:
+    primary_color: "#5c3d4a"
+    accent_color: "#c4a484"
+    font_display: "Fraunces"
+    font_body: "Outfit"
+
+categories:
+  massage_wellness:
+    id: wellness-next-template
+    version: v1
+    reference: https://kaapora.pt/pt
+    notes: Primary live wellness reference — services/prices, location, WhatsApp booking, bilingual structure
+  beauty_aesthetics:
+    id: wellness-next-template
+    version: v1
+    reference: https://kaapora.pt/pt
+  coach_trainer:
+    id: coach-next-template
+    version: v1
+    reference: https://tiago-rodrigues.lovable.app/
+    notes: Separate template/offer test
+  default:
+    id: wellness-next-template
+    version: v1

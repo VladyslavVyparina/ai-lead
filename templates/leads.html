@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% block title %}Ліди — AI Lead Pipeline{% endblock %}
+{% block content %}
+<div class="page-head">
+  <p class="eyebrow">Pipeline</p>
+  <h1>Ліди <span class="muted" style="font-family:var(--font-body);font-size:0.45em;font-weight:500;">({{ total }})</span></h1>
+  <p class="lede">Фільтруйте за містом і станом, розподіляйте Tier A/B після скорингу.</p>
+</div>
+
+<div class="card">
+  <div class="actions" style="justify-content:space-between;">
+    <form method="get" action="/ui/leads" class="actions">
+      <select name="state" style="width:auto;">
+        <option value="">— всі стани —</option>
+        {% for s in states %}<option value="{{ s }}" {% if s == state %}selected{% endif %}>{{ s }}</option>{% endfor %}
+      </select>
+      <select name="city" style="width:auto;">
+        <option value="">— всі міста —</option>
+        {% for c in cities %}<option value="{{ c }}" {% if c == city %}selected{% endif %}>{{ c }}</option>{% endfor %}
+      </select>
+      <button class="small secondary">Фільтрувати</button>
+    </form>
+    <form method="post" action="/ui/leads/assign-tiers">
+      <button class="small">Розподілити Tier A/B</button>
+    </form>
+  </div>
+</div>
+
+<div class="card">
+  {% if leads %}
+  <table>
+    <tr><th>ID</th><th>Назва</th><th>Категорія / Місто</th><th>Стан</th><th>Оцінка</th><th>Tier</th></tr>
+    {% for b in leads %}
+    {% set q = quals.get(b.id) %}
+    <tr>
+      <td>{{ b.id }}</td>
+      <td><a href="/ui/leads/{{ b.id }}"><strong>{{ b.name }}</strong></a>
+        {% if b.route != 'discovered' %}<span class="badge amber">{{ b.route }}</span>{% endif %}</td>
+      <td>{{ b.category }}<div class="muted">{{ b.city }}</div></td>
+      <td><span class="badge {% if b.state in ['won','approved','sql'] %}green{% elif b.state in ['rejected','suppressed','lost'] %}red{% elif b.state in ['new'] %}gray{% endif %}">{{ b.state }}</span></td>
+      <td>{% if q %}{{ q.total }} <span class="muted">({{ q.routing }})</span>{% else %}—{% endif %}</td>
+      <td>{% if q and q.tier %}<span class="badge">{{ q.tier }}</span>{% else %}—{% endif %}</td>
+    </tr>
+    {% endfor %}
+  </table>
+  {% if pages > 1 %}
+  <div class="actions" style="margin-top:14px;">
+    {% for p in range(1, pages + 1) %}
+    <a href="/ui/leads?page={{ p }}{% if state %}&state={{ state }}{% endif %}{% if city %}&city={{ city }}{% endif %}"
+       class="badge {% if p == page %}{% else %}gray{% endif %}">{{ p }}</a>
+    {% endfor %}
+  </div>
+  {% endif %}
+  {% else %}
+  <p class="muted">Поки що немає лідів. Додайте їх на сторінці <a href="/ui/sources">Джерела</a>.</p>
+  {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,411 @@
+# Curated Porto massage/wellness directory seed for the pilot vertical slice.
+# Used by the directory_seed adapter — public-style research data with permitted_use
+# declared on the connector. Re-running is idempotent via ingestion keys.
+catalog_id: porto_wellness_v1
+city: porto
+category: massage_wellness
+source: porto_wellness_directory_seed
+permitted_use: pilot research, public business data, cold outreach with consent guards
+
+businesses:
+  - name: Alma Spa Porto
+    address: Rua de Cedofeita 180, Porto
+    website_url: https://example-alma-spa.pt
+    profile_url: https://maps.example/alma-spa-porto
+    email: contacto@alma-spa.pt
+    phone: "+351912100001"
+    instagram: "@almaspaporto"
+    hours: "Seg–Sáb 10:00–20:00"
+    rating: 4.6
+    review_count: 128
+    services:
+      - {name: "Massagem relaxamento", price: "45€"}
+      - {name: "Massagem desportiva", price: "55€"}
+      - {name: "Ritual hot stone", price: "70€"}
+    has_website: true
+    mobile_ok: true
+    has_booking_cta: false
+    services_clear: true
+    contact_clear: true
+    notes: "Instagram active; site has no online booking"
+
+  - name: Zen Garden Wellness
+    address: Rua Santa Catarina 92, Porto
+    website_url: https://example-zengarden.pt
+    profile_url: https://maps.example/zen-garden-porto
+    email: hello@zengarden.pt
+    phone: "+351912100002"
+    instagram: "@zengardenporto"
+    hours: "Ter–Dom 11:00–19:00"
+    rating: 4.4
+    review_count: 76
+    services:
+      - {name: "Massagem tailandesa", price: "50€"}
+      - {name: "Massagem aromática", price: "48€"}
+    has_website: true
+    mobile_ok: false
+    has_booking_cta: false
+    services_clear: true
+    contact_clear: true
+    notes: "Outdated mobile layout; booking by phone only"
+
+  - name: Equilíbrio Massagens
+    address: Avenida da Boavista 850, Porto
+    website_url: ""
+    profile_url: https://maps.example/equilibrio-massagens
+    email: ""
+    phone: "+351912100003"
+    instagram: "@equilibriomassagens"
+    hours: "Seg–Sex 09:00–18:00"
+    rating: 4.8
+    review_count: 54
+    services:
+      - {name: "Massagem terapêutica", price: "40€"}
+      - {name: "Drenagem linfática", price: "55€"}
+    has_website: false
+    mobile_ok: false
+    has_booking_cta: false
+    services_clear: false
+    contact_clear: true
+    notes: "No website; strong Instagram presence"
+
+  - name: Porto Calm Studio
+    address: Rua Miguel Bombarda 45, Porto
+    website_url: https://example-portocalm.pt
+    profile_url: https://maps.example/porto-calm
+    email: mark@portocalm.pt
+    phone: "+351912100004"
+    instagram: ""
+    hours: "Seg–Sáb 10:00–19:00"
+    rating: 4.2
+    review_count: 33
+    services:
+      - {name: "Massagem sueca", price: "42€"}
+      - {name: "Massagem facial", price: "35€"}
+    has_website: true
+    mobile_ok: true
+    has_booking_cta: false
+    services_clear: false
+    contact_clear: true
+    notes: "Services buried in PDF menu"
+
+  - name: Luz & Toque Wellness
+    address: Rua do Almada 210, Porto
+    website_url: https://example-luzetoque.pt
+    profile_url: https://maps.example/luz-toque
+    email: info@luzetoque.pt
+    phone: "+351912100005"
+    instagram: "@luzetoque"
+    hours: "Seg–Dom 10:00–21:00"
+    rating: 4.7
+    review_count: 201
+    services:
+      - {name: "Massagem deep tissue", price: "60€"}
+      - {name: "Casal massage", price: "95€"}
+      - {name: "Reflexologia", price: "40€"}
+    has_website: true
+    mobile_ok: true
+    has_booking_cta: true
+    services_clear: true
+    contact_clear: true
+    notes: "Has booking but slow UX; good digital baseline"
+
+  - name: Casa do Silêncio
+    address: Rua das Flores 12, Porto
+    website_url: ""
+    profile_url: https://maps.example/casa-silencio
+    email: reservas@casadosilencio.pt
+    phone: "+351912100006"
+    instagram: "@casadosilencio"
+    hours: "Qua–Dom 12:00–20:00"
+    rating: 4.9
+    review_count: 88
+    services:
+      - {name: "Massagem ayurvédica", price: "65€"}
+      - {name: "Shirodhara", price: "80€"}
+    has_website: false
+    mobile_ok: false
+    has_booking_cta: false
+    services_clear: false
+    contact_clear: true
+    notes: "Email + IG only; no web presence"
+
+  - name: Brisa Massage Bar
+    address: Rua da Restauração 70, Porto
+    website_url: https://example-brisabar.pt
+    profile_url: https://maps.example/brisa-massage
+    email: ""
+    phone: "+351912100007"
+    instagram: "@brisamassagebar"
+    hours: "Seg–Sáb 11:00–22:00"
+    rating: 4.3
+    review_count: 145
+    services:
+      - {name: "Express 30 min", price: "25€"}
+      - {name: "Relax 60 min", price: "45€"}
+    has_website: true
+    mobile_ok: false
+    has_booking_cta: false
+    services_clear: true
+    contact_clear: false
+    notes: "Phone buried; outdated WordPress"
+
+  - name: Serenity House Porto
+    address: Rua do Rosário 33, Porto
+    website_url: https://example-serenity.pt
+    profile_url: https://maps.example/serenity-house
+    email: book@serenityhouse.pt
+    phone: "+351912100008"
+    instagram: "@serenityhouseporto"
+    hours: "Ter–Sáb 10:00–19:00"
+    rating: 4.5
+    review_count: 67
+    services:
+      - {name: "Massagem prenatal", price: "50€"}
+      - {name: "Massagem relax", price: "45€"}
+    has_website: true
+    mobile_ok: true
+    has_booking_cta: false
+    services_clear: true
+    contact_clear: true
+    notes: "No booking CTA; WhatsApp in bio only"
+
+  - name: Atelier do Corpo
+    address: Rua Formosa 55, Porto
+    website_url: ""
+    profile_url: https://maps.example/atelier-corpo
+    email: atelier@corpo.pt
+    phone: "+351912100009"
+    instagram: "@atelierdocorpo"
+    hours: "Seg–Sex 09:30–18:30"
+    rating: 4.1
+    review_count: 29
+    services:
+      - {name: "Massagem desportiva", price: "50€"}
+      - {name: "Recuperação muscular", price: "55€"}
+    has_website: false
+    mobile_ok: false
+    has_booking_cta: false
+    services_clear: false
+    contact_clear: true
+    notes: "Solo practitioner; Instagram bookings"
+
+  - name: Oasis Wellness Porto
+    address: Rua de Júlio Dinis 400, Porto
+    website_url: https://example-oasis.pt
+    profile_url: https://maps.example/oasis-wellness
+    email: rececao@oasisporto.pt
+    phone: "+351912100010"
+    instagram: "@oasiswellnessporto"
+    hours: "Seg–Dom 09:00–21:00"
+    rating: 4.0
+    review_count: 312
+    services:
+      - {name: "Spa day", price: "120€"}
+      - {name: "Massagem assinatura", price: "70€"}
+      - {name: "Facial", price: "55€"}
+    has_website: true
+    mobile_ok: true
+    has_booking_cta: true
+    services_clear: true
+    contact_clear: true
+    notes: "Larger spa; booking works but brand feels generic"
+
+  - name: Mãos de Ouro Massagem
+    address: Rua da Constituição 220, Porto
+    website_url: https://example-maosdeouro.pt
+    profile_url: https://maps.example/maos-de-ouro
+    email: ""
+    phone: "+351912100011"
+    instagram: ""
+    hours: "Seg–Sáb 10:00–18:00"
+    rating: 4.6
+    review_count: 41
+    services:
+      - {name: "Massagem clássica", price: "38€"}
+    has_website: true
+    mobile_ok: false
+    has_booking_cta: false
+    services_clear: false
+    contact_clear: true
+    notes: "Single-page outdated site; phone only"
+
+  - name: Riviera Body Care
+    address: Rua do Campo Alegre 500, Porto
+    website_url: https://example-riviera.pt
+    profile_url: https://maps.example/riviera-body
+    email: care@riviera.pt
+    phone: "+351912100012"
+    instagram: "@rivierabodycare"
+    hours: "Seg–Sex 10:00–19:00"
+    rating: 4.4
+    review_count: 93
+    services:
+      - {name: "Drenagem", price: "50€"}
+      - {name: "Massagem modeladora", price: "55€"}
+    has_website: true
+    mobile_ok: true
+    has_booking_cta: false
+    services_clear: true
+    contact_clear: true
+    notes: "Form exists but broken; Instagram active"
+
+  - name: Harmonia Terapêutica
+    address: Rua Aníbal Cunha 88, Porto
+    website_url: ""
+    profile_url: https://maps.example/harmonia-terapeutica
+    email: harmonia@terapeutica.pt
+    phone: "+351912100013"
+    instagram: "@harmoniatporto"
+    hours: "Ter–Sáb 10:00–18:00"
+    rating: 4.8
+    review_count: 62
+    services:
+      - {name: "Massagem terapêutica", price: "45€"}
+      - {name: "Ventosaterapia", price: "40€"}
+    has_website: false
+    mobile_ok: false
+    has_booking_cta: false
+    services_clear: false
+    contact_clear: true
+    notes: "No site; verified email + phone"
+
+  - name: SoftWave Spa
+    address: Rua de Sá da Bandeira 150, Porto
+    website_url: https://example-softwave.pt
+    profile_url: https://maps.example/softwave
+    email: info@softwave.pt
+    phone: "+351912100014"
+    instagram: "@softwavespa"
+    hours: "Seg–Sáb 11:00–20:00"
+    rating: 3.9
+    review_count: 58
+    services:
+      - {name: "Massagem relax", price: "40€"}
+      - {name: "Pedicure spa", price: "35€"}
+    has_website: true
+    mobile_ok: false
+    has_booking_cta: false
+    services_clear: true
+    contact_clear: true
+    notes: "Mixed reviews; mobile broken"
+
+  - name: Nuvem Massage Studio
+    address: Rua do Bonjardim 310, Porto
+    website_url: https://example-nuvem.pt
+    profile_url: https://maps.example/nuvem-studio
+    email: studio@nuvem.pt
+    phone: "+351912100015"
+    instagram: "@nuvemmassage"
+    hours: "Seg–Sex 09:00–17:00"
+    rating: 4.7
+    review_count: 47
+    services:
+      - {name: "Massagem corporativa", price: "45€"}
+      - {name: "Chair massage", price: "20€"}
+    has_website: true
+    mobile_ok: true
+    has_booking_cta: false
+    services_clear: true
+    contact_clear: true
+    notes: "B2B angle; no self-serve booking"
+
+  - name: Pérola do Douro Wellness
+    address: Cais de Gaia (view Porto), Vila Nova de Gaia
+    website_url: https://example-perola.pt
+    profile_url: https://maps.example/perola-douro
+    email: reservas@peroladouro.pt
+    phone: "+351912100016"
+    instagram: "@peroladourowellness"
+    hours: "Qui–Dom 12:00–21:00"
+    rating: 4.5
+    review_count: 110
+    services:
+      - {name: "Massagem com vista", price: "75€"}
+      - {name: "Pacote casal", price: "140€"}
+    has_website: true
+    mobile_ok: true
+    has_booking_cta: false
+    services_clear: true
+    contact_clear: true
+    notes: "Tourist-facing; booking via email"
+
+  - name: Clínica Toque Natural
+    address: Rua de Fernandes Tomás 600, Porto
+    website_url: https://example-toquenatural.pt
+    profile_url: https://maps.example/toque-natural
+    email: clinica@toquenatural.pt
+    phone: "+351912100017"
+    instagram: ""
+    hours: "Seg–Sex 08:30–19:00"
+    rating: 4.3
+    review_count: 84
+    services:
+      - {name: "Fisioterapia + massagem", price: "50€"}
+      - {name: "Massagem clínica", price: "45€"}
+    has_website: true
+    mobile_ok: true
+    has_booking_cta: true
+    services_clear: true
+    contact_clear: true
+    notes: "Clinical site; booking via third party"
+
+  - name: Flor de Lótus Porto
+    address: Rua do Sol 19, Porto
+    website_url: ""
+    profile_url: https://maps.example/flor-lotus
+    email: ""
+    phone: "+351912100018"
+    instagram: "@flordelotusporto"
+    hours: "Ter–Sáb 11:00–19:00"
+    rating: 4.9
+    review_count: 156
+    services:
+      - {name: "Massagem holística", price: "55€"}
+      - {name: "Reiki + toque", price: "45€"}
+    has_website: false
+    mobile_ok: false
+    has_booking_cta: false
+    services_clear: false
+    contact_clear: true
+    notes: "IG-only brand; high demand signal"
+
+  - name: Norte Recovery Lab
+    address: Rua D. Manuel II 120, Porto
+    website_url: https://example-norterecovery.pt
+    profile_url: https://maps.example/norte-recovery
+    email: lab@norterecovery.pt
+    phone: "+351912100019"
+    instagram: "@norterecoverylab"
+    hours: "Seg–Sáb 07:00–21:00"
+    rating: 4.6
+    review_count: 98
+    services:
+      - {name: "Recovery massage", price: "50€"}
+      - {name: "Percussão + alongamento", price: "40€"}
+    has_website: true
+    mobile_ok: true
+    has_booking_cta: false
+    services_clear: true
+    contact_clear: true
+    notes: "Athlete niche; calendar not online"
+
+  - name: Quiet Room Massagens
+    address: Rua da Picaria 8, Porto
+    website_url: https://example-quietroom.pt
+    profile_url: https://maps.example/quiet-room
+    email: quiet@quietroom.pt
+    phone: "+351912100020"
+    instagram: "@quietroomporto"
+    hours: "Seg–Sex 10:00–18:00"
+    rating: 4.2
+    review_count: 37
+    services:
+      - {name: "Massagem silent", price: "48€"}
+      - {name: "Head & shoulders", price: "30€"}
+    has_website: true
+    mobile_ok: false
+    has_booking_cta: false
+    services_clear: true
+    contact_clear: true
+    notes: "Quiet branding; site not mobile-friendly"

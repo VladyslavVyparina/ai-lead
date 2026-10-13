@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+{% block title %}Аутріч — AI Lead Pipeline{% endblock %}
+{% block content %}
+<div class="page-head">
+  <p class="eyebrow">Outreach</p>
+  <h1>Аутріч</h1>
+  <p class="lede">AI draft з ресерчу ліда → human approval → ручна відправка. Guards (згода, suppression, 4 торкання) завжди увімкнені.</p>
+</div>
+
+<div class="card">
+  <h2>Нова чернетка</h2>
+  {% if contactable %}
+  <form method="post" action="/ui/outreach/draft">
+    <div class="row">
+      <div>
+        <label>Бізнес (у стані approved/contacted/follow_up/engaged)</label>
+        <select name="business_id" required>
+          {% for b in contactable %}<option value="{{ b.id }}">#{{ b.id }} {{ b.name }} ({{ b.state }})</option>{% endfor %}
+        </select>
+      </div>
+      <div>
+        <label>Канал</label>
+        <select name="channel">
+          <option value="email">email</option>
+          <option value="form">form</option>
+          <option value="instagram">instagram</option>
+          <option value="linkedin">linkedin</option>
+          <option value="whatsapp">whatsapp (лише за opt-in)</option>
+        </select>
+      </div>
+      <div>
+        <label>Торкання №</label>
+        <select name="touch_number">
+          <option value="1">1 — перший контакт</option>
+          <option value="2">2 — follow-up (день 3-4)</option>
+          <option value="3">3 — інсайт/превʼю (день 7)</option>
+          <option value="4">4 — закриття (день 12)</option>
+        </select>
+      </div>
+    </div>
+    <label>Текст (португальська, 1 спостереження + 1 вигода + 1 CTA)</label>
+    <textarea name="body" required placeholder="Olá..."></textarea>
+    <div style="margin-top:12px;"><button>Створити чернетку</button></div>
+  </form>
+  {% else %}
+  <p class="muted">Немає бізнесів у станах, дозволених для контакту. Спочатку доведіть лідів до стану <strong>approved</strong> у розділі «Ліди».</p>
+  {% endif %}
+</div>
+
+<div class="card">
+  <h2>Черга повідомлень</h2>
+  {% if messages %}
+  <table>
+    <tr><th>ID</th><th>Бізнес</th><th>Канал</th><th>Текст</th><th>Статус</th><th>Дії</th></tr>
+    {% for m in messages %}
+    {% set biz = businesses.get(m.business_id) %}
+    <tr>
+      <td>{{ m.id }}</td>
+      <td>{% if biz %}<a href="/ui/leads/{{ biz.id }}">{{ biz.name }}</a>{% else %}#{{ m.business_id }}{% endif %}</td>
+      <td><span class="badge gray">{{ m.channel }}</span> #{{ m.touch_number }}</td>
+      <td style="max-width:320px;">{{ m.body[:120] }}{% if m.body|length > 120 %}…{% endif %}
+        {% if m.research_snapshot %}
+        <div class="muted">research: {{ m.research_snapshot.get('observation', '')[:80] }}</div>
+        {% endif %}
+      </td>
+      <td><span class="badge {% if m.status == 'sent' %}green{% elif m.status in ['cancelled'] %}red{% elif m.status == 'approved' %}amber{% endif %}">{{ m.status }}</span></td>
+      <td>
+        <div class="actions">
+          {% if m.status == 'draft' %}
+          <form class="inline" method="post" action="/ui/outreach/{{ m.id }}/approve"><button class="small">Затвердити</button></form>
+          {% elif m.status == 'approved' %}
+          <form class="inline" method="post" action="/ui/outreach/{{ m.id }}/mark-sent"
+                onsubmit="return confirm('Підтвердіть: повідомлення вже реально відправлено вручну?');">
+            <button class="small secondary">Позначити відправленим</button>
+          </form>
+          {% else %}—{% endif %}
+        </div>
+      </td>
+    </tr>
+    {% endfor %}
+  </table>
+  {% else %}<p class="muted">Черга порожня.</p>{% endif %}
+</div>
+{% endblock %}

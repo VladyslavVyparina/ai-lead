@@ -1,0 +1,44 @@
+{
+  "business_name": { "value": "Estúdio Bem-Estar (Demo)", "source_url": "", "confidence": 1.0 },
+  "category": "massage_wellness",
+  "city": "porto",
+  "address": { "value": "Rua de Exemplo 123, Porto", "source_url": "", "confidence": 1.0 },
+  "hours": { "value": "Seg–Sáb 10:00–19:00", "source_url": "", "confidence": 1.0 },
+  "phone": { "value": "+351 910 000 000", "source_url": "", "confidence": 1.0 },
+  "email": { "value": "demo@example.pt", "source_url": "", "confidence": 1.0 },
+  "whatsapp": { "value": "+351 910 000 000", "source_url": "", "confidence": 1.0 },
+  "socials": { "instagram": "https://instagram.com/example" },
+  "services": [
+    {
+      "name": { "value": "Massagem de relaxamento", "source_url": "", "confidence": 1.0 },
+      "price": { "value": "45€ / 60 min", "source_url": "", "confidence": 1.0 },
+      "description": "Alívio de tensão e stress"
+    },
+    {
+      "name": { "value": "Massagem desportiva", "source_url": "", "confidence": 1.0 },
+      "price": { "value": "55€ / 60 min", "source_url": "", "confidence": 1.0 },
+      "description": ""
+    },
+    {
+      "name": { "value": "Drenagem linfática", "source_url": "", "confidence": 1.0 },
+      "price": null,
+      "description": ""
+    }
+  ],
+  "description": {
+    "value": "Estúdio de massagem e bem-estar no centro do Porto. Marcação fácil, ambiente calmo e profissionais certificados.",
+    "source_url": "",
+    "confidence": 1.0
+  },
+  "team": [],
+  "logo_url": "",
+  "primary_color": "#2f6f5e",
+  "seo_title": "Estúdio Bem-Estar — Massagem no Porto",
+  "seo_description": "Massagem de relaxamento, desportiva e drenagem no Porto. Marque online.",
+  "booking_url": "",
+  "form_endpoint": "http://localhost:8000/preview-form",
+  "mode": "preview",
+  "noindex": true,
+  "build_id": "1",
+  "form_token": "0000000000000000000000000000000000000000000000000000000000000000"
+}

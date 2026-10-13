@@ -1,0 +1,49 @@
+# Pricebook derived from the Kaapora proposal (§6). OFFER LOCK: lead with
+# Local Pro / Automation Pro at EUR 500-900; Basic stays as credible entry.
+proposal_template_version: kaapora-v1
+
+packages:
+  basic:
+    label: Basic Website
+    price_from_eur: 300
+    scope: Working one-page site, domain setup, contact form/links, base local SEO, analytics and Search Console
+    best_fit: Credible online presence
+  local_pro:
+    label: Local Pro
+    price_from_eur: 500
+    price_to_eur: 600
+    scope: Basic plus business-profile/map assistance and online booking integration
+    best_fit: Discovery + easy booking
+  automation_pro:
+    label: Automation Pro
+    price_from_eur: 700
+    price_to_eur: 900
+    scope: Local Pro plus simple CRM and optional assistant integration
+    best_fit: Lead/client management and automation
+
+addons:
+  business_profile_map:
+    range_eur: [80, 120]
+    scope: Creation/fix assistance, categories, business info and site connection
+  online_booking:
+    range_eur: [150, 250]
+    scope: Tool selection, embedded path, notifications and simple management
+  simple_crm:
+    range_eur: [150, 250]
+    scope: Client/lead database, stages, form integration and guide
+  ai_whatsapp_assistant:
+    range_eur: [200, 300]
+    scope: FAQ/booking support and CRM handoff when approved
+
+support_plans:
+  essential_care:
+    price: "EUR 99/year prepaid"
+    included: Hosting/SSL, uptime checks, backups and basic technical maintenance
+  managed_care:
+    price: "EUR 19/month or EUR 190/year"
+    included: Essential plus one small update/quarter and form/booking health check
+  growth_care:
+    price: "EUR 39/month or EUR 390/year"
+    included: Managed plus one small update/month and basic analytics/SEO summary
+
+payment_terms: "50% to start, 50% before production launch. Every package includes 30 days launch support. Domains and paid subscriptions are separate."

@@ -1,0 +1,22 @@
+{
+  "name": "wellness-next-template",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Category template (massage/wellness + beauty) rendered from a validated SiteConfig. Template Registry id: wellness-next-template.",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start"
+  },
+  "dependencies": {
+    "next": "^16.2.11",
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8"
+  },
+  "overrides": {
+    "next": {
+      "postcss": "8.5.22",
+      "sharp": "0.35.3"
+    }
+  }
+}
