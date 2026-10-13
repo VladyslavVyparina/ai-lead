@@ -1,38 +1,38 @@
-# Summary попереднього проекту: bot_ai-agent
+# Previous project: bot_ai-agent
 
-Розташування: `/Users/macbookpro/Desktop/bot_ai-agent` (~2 400 рядків Python)
+The working copy lived at `bot_ai-agent` on the author machine, about 2,400 lines of Python. This note is what that system was, and which parts the AI Lead control plane kept.
 
-## Що це
+## What it was
 
-CRM з AI-агентом для обробки лідів через Telegram + AI-дзвінки. Стек: **FastAPI + SQLAlchemy (SQLite) + aiogram 3 + OpenAI + ElevenLabs/Zadarma**.
+A CRM with an AI agent for leads over Telegram, plus AI phone calls. Stack: FastAPI, SQLAlchemy on SQLite, aiogram 3, OpenAI, ElevenLabs, and Zadarma.
 
-## Компоненти
+## Parts
 
-| Компонент | Файли | Опис |
+| Part | Files | Role |
 |---|---|---|
-| Telegram-бот | `app/bot.py` (452 р.) | Діалог з лідом через GPT (gpt-4o-mini), транскрипція голосових, збір телефону, "typing" імітація, санітизація відповідей |
-| API/вебхуки | `app/main.py` (352 р.) | FastAPI: вебхуки Zadarma та ElevenLabs post-call (транскрипт, summary, фідбек по дзвінку через GPT, нотифікація ліда в Telegram) |
-| Адмін-панель | `app/admin.py` (733 р.) + `templates/` | Jinja2 UI: логін (bcrypt + сесії), список/деталі лідів, AI-knowledge, діагностика телефонії, користувачі/ролі (owner/manager) |
-| Телефонія | `app/services/telephony_service.py`, `zadarma_service.py`, `elevenlabs_convai_service.py` | Ініціація AI-дзвінка ліду: Zadarma callback API або ElevenLabs ConvAI через SIP; auto-вибір провайдера |
-| Self-learning | `app/services/learning_service.py` | `LearningProfile` — накопичуваний контекст ніші, який доклеюється в system prompt; щоденний фоновий воркер оновлення + `LearningReport` |
-| SIP-проксі | `sip_proxy/` | Готові конфіги Asterisk (pjsip, extensions, rtp) + install/configure скрипти для мосту Zadarma ↔ ElevenLabs |
-| Лендінг | `site_client/` | Статичний сайт-візитка з формою (SendPulse), email-шаблон, thank-you сторінка |
+| Telegram bot | `app/bot.py` (452 lines) | Lead dialogue through GPT (gpt-4o-mini), voice transcription, phone capture, a typing indicator, and response cleanup |
+| API and webhooks | `app/main.py` (352 lines) | FastAPI webhooks for Zadarma and for the ElevenLabs post-call payload: transcript, summary, GPT feedback, Telegram notice to the lead |
+| Admin | `app/admin.py` (733 lines) plus `templates/` | Jinja2 UI: bcrypt login and sessions, lead list and detail, AI knowledge, telephony diagnostics, users and roles (owner, manager) |
+| Telephony | `telephony_service.py`, `zadarma_service.py`, `elevenlabs_convai_service.py` | Start an AI call: Zadarma callback API, or ElevenLabs ConvAI over SIP, with automatic provider choice |
+| Self-learning | `learning_service.py` | A `LearningProfile` of niche context appended to the system prompt, a daily worker, and a `LearningReport` |
+| SIP proxy | `sip_proxy/` | Asterisk configs (pjsip, extensions, rtp) and install scripts for the Zadarma to ElevenLabs bridge |
+| Landing | `site_client/` | A static card site with a SendPulse form, an email layout, and a thank-you page |
 
-## Модель даних
+## Data
 
-`Lead` (telegram_user_id, name, phone, needs, status) → `ChatMessage` (роль/джерело: text/voice/call_feedback) → `CallRecord` (provider, call_id, transcript, summary JSON). Окремо: `LearningProfile`, `LearningReport`, `AdminUser`/`AdminSession`/`AdminProfile`.
+`Lead` (telegram user id, name, phone, needs, status) points at `ChatMessage` (role and source: text, voice, or call feedback) and `CallRecord` (provider, call id, transcript, summary JSON). Separate tables: `LearningProfile`, `LearningReport`, `AdminUser`, `AdminSession`, `AdminProfile`.
 
-## Що варто перевикористати в новому проекті
+## What the new project reused
 
-- Патерн FastAPI + SQLAlchemy + Pydantic Settings з `.env`.
-- Механіка вебхуків з ідемпотентним мапінгом записів (пошук за conversation_id / lead_id).
-- Підхід "адмінка на Jinja2" для швидкого operator UI.
-- Досвід інтеграції телефонії — у новій архітектурі AI-дзвінки поза P0, але адаптерний підхід переноситься.
+- FastAPI, SQLAlchemy, and Pydantic settings from `.env`.
+- Webhooks that map a record once, looked up by conversation id or lead id.
+- A Jinja2 operator UI when a heavy frontend is not required.
+- The telephony adapter shape. AI calls are outside the first release of AI Lead, but the adapter approach carries over.
 
-## Ключові відмінності нового проекту (AI Lead Pipeline)
+## What changed
 
-- Не один бот, а **детермінований оркестратор** зі змінними source-адаптерами і bounded-агентами.
-- Уся комерція/скоринг/меседжинг — **версіонована конфігурація**, не код і не промпти.
-- Повний state machine ліда (new → … → won/lost/suppressed) з **immutable event log**.
-- Outreach лише через **людське затвердження + consent/suppression guards**.
-- Фабрика превʼю-сайтів (SiteConfig → Next.js шаблон → deploy) замість чат-діалогу.
+- One bot became a deterministic orchestrator with swappable source adapters and bounded agents.
+- Commerce, scoring, and messaging are versioned configuration, not code and not prompts.
+- The lead state machine (`new` through `won`, `lost`, or `suppressed`) writes an immutable event log.
+- Outreach waits for a person, plus consent and suppression checks.
+- Preview sites are a factory (SiteConfig, a Next.js template, deploy) instead of a chat transcript.

@@ -39,3 +39,10 @@ cp .env.example .env
 ## What this public copy leaves out
 
 Secrets, the local pipeline database, virtualenv, and the bundled Node toolchain. The working copy stays on the author machine.
+
+## Documents
+
+- `docs/TESTING.md` is the operator checklist: pytest, the UI path from import to an approved send, the local preview on port 3100, and CORS.
+- `docs/BOT_AI_AGENT_SUMMARY.md` is the earlier Telegram-and-calls CRM this control plane replaced, and which pieces were kept.
+- `site_template/README.md` is the Next.js preview. One lead changes `SiteConfig` only. Missing facts are not rendered, and prices are not invented.
+- Markets, FitQL weights, the price book, and message copy are versioned YAML with publish and rollback. The pilot is 15 Tier A and 15 Tier B packages in Porto, Lisbon, and Braga.
